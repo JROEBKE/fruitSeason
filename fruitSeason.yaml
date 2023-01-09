@@ -1,0 +1,289 @@
+openapi: 3.0.3
+info:
+    version: "1.0"
+    title: "fruitSeasons"
+    description: "API for getting fruits with their season details which I use for demonstrational purpose"
+    license:
+        name: MIT License
+servers:
+    - url: http://localhost:8080
+      description: "development"
+paths:
+    /fruitsSeason/:
+        get:
+            tags:
+                - fruits
+            summary: Get fruits for seasons
+            operationId: getAllfruitSeasons
+            parameters:
+                - $ref: "#/components/parameters/CountryParam"
+                - $ref: "#/components/parameters/Limit"
+                - $ref: "#/components/parameters/Page"
+                - $ref: "#/components/parameters/SeasonParam"
+            responses:
+                "200":
+                    $ref: "#/components/responses/Success"
+                "400":
+                    $ref: "#/components/responses/Error"
+                "401":
+                    $ref: "#/components/responses/Error"
+                "404":
+                    $ref: "#/components/responses/Error"
+                "500":
+                    $ref: "#/components/responses/Error"
+            security:
+                - qs: []
+        post:
+            tags:
+                - fruits
+            operationId: postNewFruit
+            parameters:
+                - $ref: "#/components/parameters/CountryParam"
+            requestBody:
+                $ref: "#/components/requestBodies/FruitBody"
+            responses:
+                "201":
+                    $ref: "#/components/responses/SuccessSingle"
+                "400":
+                    $ref: "#/components/responses/Error"
+                "401":
+                    $ref: "#/components/responses/Error"
+                "500":
+                    $ref: "#/components/responses/Error"
+            security:
+                - qs: []
+    /fruitsSeason/{id}:
+        get:
+            tags:
+                - fruit
+            operationId: getFruitById
+            parameters:
+                - $ref: "#/components/parameters/Id"
+            responses:
+                "200":
+                    $ref: "#/components/responses/SuccessSingle"
+                "400":
+                    $ref: "#/components/responses/Error"
+                "401":
+                    $ref: "#/components/responses/Error"
+                "500":
+                    $ref: "#/components/responses/Error"
+            security:
+                - qs: []
+        put:
+            tags:
+                - fruit
+            operationId: updateFruitById
+            parameters:
+                - $ref: "#/components/parameters/Id"
+            requestBody:
+                $ref: "#/components/requestBodies/FruitBody"
+            responses:
+                "200":
+                    $ref: "#/components/responses/SuccessSingle"
+                "400":
+                    $ref: "#/components/responses/Error"
+                "401":
+                    $ref: "#/components/responses/Error"
+                "500":
+                    $ref: "#/components/responses/Error"
+            security:
+                - qs: []
+        delete:
+            tags:
+                - fruit
+            operationId: deleteFruitById
+            parameters:
+                - $ref: "#/components/parameters/Id"
+            responses:
+                "200":
+                    description: "Ok"
+                "400":
+                    $ref: "#/components/responses/Error"
+                "401":
+                    $ref: "#/components/responses/Error"
+                "500":
+                    $ref: "#/components/responses/Error"
+            security:
+                - qs: []
+        patch:
+            tags:
+                - fruit
+            operationId: patchFruitById
+            parameters:
+                - $ref: "#/components/parameters/Id"
+            requestBody:
+                $ref: "#/components/requestBodies/FruitBody"
+            responses:
+                "200":
+                    $ref: "#/components/responses/SuccessSingle"
+                "400":
+                    $ref: "#/components/responses/Error"
+                "401":
+                    $ref: "#/components/responses/Error"
+                "500":
+                    $ref: "#/components/responses/Error"
+            security:
+                - qs: []
+components:
+    schemas:
+        Fruits:
+            type: array
+            items:
+                $ref: "#/components/schemas/Fruit"
+        Fruit:
+            type: object
+            properties:
+                id:
+                    $ref: "#/components/schemas/Id"
+                fruit:
+                    type: string
+                    description: name of the fruit in english
+                    example: "apple"
+                    minLength: 1
+                    maxLength: 100
+                seasonTimes:
+                    $ref: "#/components/schemas/SeasonTimes"
+        Id:
+            type: string
+            format: uuid
+            description: uuid for a specific fruit
+            example: "axzy123"
+            readOnly: true
+        Country:
+            description: "countryCode as paramater for which country data should be served following ISO 3166-1 Alpha 2, but only for enums listed"
+            type: string
+            minLength: 2
+            maxLength: 2
+            pattern: ^(A(D|E|F|G|I|L|M|N|O|R|S|T|Q|U|W|X|Z)|B(A|B|D|E|F|G|H|I|J|L|M|N|O|R|S|T|V|W|Y|Z)|C(A|C|D|F|G|H|I|K|L|M|N|O|R|U|V|X|Y|Z)|D(E|J|K|M|O|Z)|E(C|E|G|H|R|S|T)|F(I|J|K|M|O|R)|G(A|B|D|E|F|G|H|I|L|M|N|P|Q|R|S|T|U|W|Y)|H(K|M|N|R|T|U)|I(D|E|Q|L|M|N|O|R|S|T)|J(E|M|O|P)|K(E|G|H|I|M|N|P|R|W|Y|Z)|L(A|B|C|I|K|R|S|T|U|V|Y)|M(A|C|D|E|F|G|H|K|L|M|N|O|Q|P|R|S|T|U|V|W|X|Y|Z)|N(A|C|E|F|G|I|L|O|P|R|U|Z)|OM|P(A|E|F|G|H|K|L|M|N|R|S|T|W|Y)|QA|R(E|O|S|U|W)|S(A|B|C|D|E|G|H|I|J|K|L|M|N|O|R|T|V|Y|Z)|T(C|D|F|G|H|J|K|L|M|N|O|R|T|V|W|Z)|U(A|G|M|S|Y|Z)|V(A|C|E|G|I|N|U)|W(F|S)|Y(E|T)|Z(A|M|W))$
+            enum:
+                - DE
+                - US
+            default: DE
+        SeasonTimes:
+            type: object
+            properties:
+                startDate:
+                    type: string
+                    format: date
+                    description: >-
+                        returns season start date following ISO8601 YYYY-MM-DD, as long it
+                        is in the future or the seasonEndDate has not reached
+                    example: "2023-06-01"
+                    pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$
+                endDate:
+                    type: string
+                    format: date
+                    description: name of the fruit
+                    example: "2023-09-30"
+                    pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$
+                activeSeason:
+                    type: boolean
+                    description: true if currently in season
+                    example: true
+                    readOnly: true
+                leftDaysUntilSeasonStarts:
+                    type: integer
+                    format: int32
+                    description: days left until season starts
+                    example: 5
+                    readOnly: true
+                    minimum: 0
+                    maximum: 365
+                leftDaysUntilSeasonEnds:
+                    type: integer
+                    format: int32
+                    description: days left until season ends
+                    example: 31
+                    readOnly: true
+                    minimum: 0
+                    maximum: 365
+    parameters:
+        CountryParam:
+            name: country
+            required: true
+            in: header
+            schema:
+                $ref: "#/components/schemas/Country"
+        SeasonParam:
+            name: season
+            required: false
+            in: query
+            schema:
+                $ref: "#/components/schemas/SeasonTimes"
+        Limit:
+            name: limit
+            description: "allows to limit response object count"
+            required: false
+            in: query
+            schema:
+                type: integer
+                format: int32
+                example: 50
+                default: 100
+                minimum: 1
+                maximum: 99999
+        Page:
+            name: page
+            description: allows to specify which page to provide
+            required: false
+            in: query
+            schema:
+                type: integer
+                format: int32
+                example: 1
+                default: 1
+                minimum: 1
+                maximum: 99999
+        Id:
+            name: id
+            in: path
+            required: true
+            schema:
+                $ref: "#/components/schemas/Id"
+    requestBodies:
+        FruitBody:
+            description: Fruit to be added to catalogue
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Fruit"
+    responses:
+        Success:
+            description: "OK"
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Fruits"
+        SuccessSingle:
+            description: "OK"
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Fruit"
+        Error:
+            description: "this is the generic error object"
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            status:
+                                type: string
+                                description: http error code
+                                example: "000"
+                            satusDescription:
+                                type: string
+                                description: insight what was the reason for this error
+                                example: "Wrong formated data for datafield XY"
+                            timestamp:
+                                type: string
+                                format: date-time
+                                description: UTC Timestamp YYYY-MM-DDThh:mm±hh:mm when error occured
+                                example: "2017-07-30T05:58+02:00"
+    securitySchemes:
+        qs:
+            in: header
+            type: apiKey
+            name: X-API-Key
